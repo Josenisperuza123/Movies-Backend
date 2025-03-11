@@ -19,4 +19,4 @@ app.use('/media', require('./routes/media'));
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+}) 
