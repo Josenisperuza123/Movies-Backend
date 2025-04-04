@@ -18,9 +18,11 @@ app.use(express.json());
   app.use('/genero', require('./routes/genero'));
   app.use('/tipo', require('./routes/tipo')); 
   app.use('/media', require('./routes/media'));
-  
+
+app.get('/', (req, res) => {
+  res.send('servidor funcionando');
+}),
   
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-  
