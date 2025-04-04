@@ -1,30 +1,32 @@
 const express = require('express');
-const cors = require('cors');  // <-- Agregado para evitar errores de CORS
-const getConnection = require('./db/connect-mongo');
+const cors = require('cors');  // Importar CORS
+const { connect } = require('./db/connect-mongo'); // Conexión a MongoDB Atlas
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 8000; // <-- Asegura que el puerto tenga un valor por defecto
+const port = process.env.PORT || 3000; // Puerto por defecto
 
-getConnection();
+// Habilitar CORS para permitir solicitudes desde el frontend
+app.use(cors());
 
-// Configurar CORS para permitir peticiones desde el frontend
-app.use(cors({
-    origin: 'https://movies-frontend-1sg3.onrender.com', 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+// Middleware para recibir JSON
 app.use(express.json());
 
-// Definir rutas
+// Conectar a MongoDB Atlas
+connect().then(() => {
+    console.log('✅ Conectado a MongoDB Atlas');
+}).catch((err) => {
+    console.error('❌ Error conectando a MongoDB:', err);
+});
+
+// Rutas
 app.use('/productora', require('./routes/productora'));
 app.use('/director', require('./routes/director'));
 app.use('/genero', require('./routes/genero'));
 app.use('/tipo', require('./routes/tipo'));
 app.use('/media', require('./routes/media'));
 
-// Iniciar servidor
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Example app listening on port ${port}`);
+// Servidor escuchando
+app.listen(port, () => {
+    console.log(`🚀 Servidor escuchando en el puerto ${port}`);
 });
